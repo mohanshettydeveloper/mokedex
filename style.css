@@ -1,0 +1,44 @@
+.success, .error {
+  color: white;
+  padding: 5px;
+  margin: 5px 0 15px 0;
+}
+
+.success {
+  background: green;
+}
+
+.error {
+  background: red;
+}
+
+#moke-list tr:nth-child(even) td {
+  background: bisque;
+  text-align: center;
+}
+
+#moke-list tr:nth-child(odd) td {
+  background: aliceblue;
+  text-align: center;
+}
+
+hr {
+  position: relative;
+  top: 5px;
+  border: none;
+  height: 4px;
+  background: black;
+  margin-bottom: 50px;
+}
+
+#deckwrapper {
+  display: flow;
+  border: 1px solid brown;
+}
+
+#deckitem {
+  display: inline-block;
+  width:100px;
+  height:100px;
+  border: 1px solid green;
+}
