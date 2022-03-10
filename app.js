@@ -146,12 +146,12 @@ function removeMokemon(e) {
   if (e.target.classList.contains('remove-mokemon')) {
     const mokeMonRow = e.target.parentElement.parentElement;
     const mokeMonTd = mokeMonRow.getElementsByClassName('moke-name')
-
-    if (confirm('You sure want to delete?')) {
+    const mokeMonBeingDeleted = mokeMonTd[0].innerHTML;
+    if (confirm('You sure want to delete? ' + mokeMonBeingDeleted)) {
       e.target.parentElement.parentElement.remove();
-      const mokeMonDeleted = mokeMonTd[0].innerHTML;
+
       mokeMonsArr.forEach((mokeMon, index) => {
-        if (mokeMonDeleted === mokeMon.name.toUpperCase()) {
+        if (mokeMonBeingDeleted === mokeMon.name.toUpperCase()) {
           mokeMonsArr.splice(index, 1);
         }
       });
@@ -177,7 +177,8 @@ function deleteMokemonFromDeck(e) {
     console.log(mokeMonDeckDiv);
     // const mokeMonTd = mokeMonRow.getElementsByClassName('moke-name')
 
-    if (confirm('You sure want to delete?' + beingDeletedMokemonName)) {
+    if (confirm('You sure want to delete ' + beingDeletedMokemonName
+        + ' from the deck?')) {
       e.target.parentElement.remove();
       mokeDexArr.forEach((mokeMon, index) => {
         if (beingDeletedMokemonName === mokeMon.name.toUpperCase()) {
