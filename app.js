@@ -2,6 +2,8 @@
 const form = document.querySelector('#moke-form');
 const mokeList = document.querySelector('#moke-list');
 const totalMokemons = document.getElementById('total');
+const mokeMonsDeck = document.querySelector('.moke-dex');
+;
 
 let mokeMonsArr = [];
 let mokeDexArr = [];
@@ -11,9 +13,10 @@ loadEventListeners();
 // Load all event listeners
 function loadEventListeners() {
   // DOM Load event
-  mokeList.addEventListener('click', deleteMokemon);
+  mokeList.addEventListener('click', removeMokemon);
   mokeList.addEventListener('click', flipMe);
   mokeList.addEventListener('click', saveMeToDex);
+  mokeMonsDeck.addEventListener('click', deleteMokemonFromDeck);
 }
 
 //Column heading color
@@ -69,7 +72,7 @@ UI.prototype.fetchKantoPokemon = function (moke) {
           row.innerHTML = `<td class="moke-name" style="font-family: Verdana; font-size:large;">${mokeName.toUpperCase()}</td>
 <td id="moke-image"><img class="flip-me" src=${mokeFront} width="70" height="70"/></td>
 <td id="moke-save"><button class="save-mokemon" id='actionsave' type="button" style="background: aquamarine">Save</button></td>
-<td id="moke-remove"><a href="#" class='delete-mokemon'>Remove</a></td>`
+<td id="moke-remove"><a href="#" class='remove-mokemon'>Remove</a></td>`
 
           mokeList.appendChild(row);
 
@@ -109,10 +112,10 @@ UI.prototype.showAlert = function (message, className) {
   //Insert alert
   container.insertBefore(div, form);
 
-  // Timeout after 3 sec
+  // Alerts Timeout after few seconds
   setTimeout(function () {
     document.querySelector('.alert').remove();
-  }, 500);
+  }, 1250);
 
 };
 
@@ -139,8 +142,8 @@ document.getElementById('moke-form').addEventListener("submit",
     });
 
 // Remove Mokemon
-function deleteMokemon(e) {
-  if (e.target.classList.contains('delete-mokemon')) {
+function removeMokemon(e) {
+  if (e.target.classList.contains('remove-mokemon')) {
     const mokeMonRow = e.target.parentElement.parentElement;
     const mokeMonTd = mokeMonRow.getElementsByClassName('moke-name')
 
@@ -157,6 +160,33 @@ function deleteMokemon(e) {
           + mokeList.childElementCount;
     }
   }
+}
+
+// Remove Mokemon
+function deleteMokemonFromDeck(e) {
+  // console.log('target=', e.target);
+  const beingDeletedMokemonName = e.target.parentElement.children[1].textContent;
+  console.log(beingDeletedMokemonName);
+
+  console.log('e.target.parentElement=', e.target.parentElement);
+  console.log('e.target.parentElement.parentElement=',
+      e.target.parentElement.parentElement)
+  if (e.target.id === 'delete-mokemon-from-deck') {
+    const mokeMonDeckDiv = e.target.parentElement.parentElement.parentElement;
+
+    console.log(mokeMonDeckDiv);
+    // const mokeMonTd = mokeMonRow.getElementsByClassName('moke-name')
+
+    if (confirm('You sure want to delete?' + beingDeletedMokemonName)) {
+      e.target.parentElement.remove();
+      mokeDexArr.forEach((mokeMon, index) => {
+        if (beingDeletedMokemonName === mokeMon.name.toUpperCase()) {
+          mokeDexArr.splice(index, 1);
+        }
+      });
+    }
+  }
+
 }
 
 // Flip Mokemon
@@ -201,10 +231,11 @@ dexDiv.id = "deckwrapper";
 function saveMeToDex(e) {
   const mokeDexDiv = document.getElementsByClassName('moke-dex');
   const dexDivAlreadyExist = document.getElementById('deckwrapper');
+  let beingSavedMokemonName = '';
   if (!dexDivAlreadyExist) {
     mokeDexDiv[0].appendChild(dexDiv);
   }
-  // mokeDexDiv[0].appendChild(dexDiv);
+
   const dexItemDiv = document.createElement('div');
   dexItemDiv.id = "deckitem";
 
@@ -234,10 +265,22 @@ function saveMeToDex(e) {
       dexImageDeleteLink.innerText = 'Delete Me';
 
       dexImage.src = mokeMonImageSrc;
-      dexItemDiv.appendChild(dexImage)
-      // dexImage.innerHTML = dexImageDeleteLink;
+      dexItemDiv.appendChild(dexImage);
+      const beingDeletedMokeMonName = document.createElement('label');
+      beingDeletedMokeMonName.innerText = saveThisMokeMonName;
+      dexItemDiv.appendChild(beingDeletedMokeMonName);
+
+      const deleteLink = document.createElement('a');
+      deleteLink.innerText = "Delete"
+      deleteLink.href = "#";
+
+      // deleteLink.className = "delete-mokemon-from-deck";
+      deleteLink.id = "delete-mokemon-from-deck";
+
+      dexItemDiv.appendChild(deleteLink);
+      dexItemDiv.style.textAlign = "center";
+
       dexDiv.appendChild(dexItemDiv);
-      // mokeDexDiv[0].appendChild(dexImageDeleteLink);
 
       mokeDexArr.push({
         name: saveThisMokeMonName,
